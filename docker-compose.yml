@@ -1,0 +1,35 @@
+version: '3.1'
+ 
+services:
+  coltip_db:
+    image: postgres:latest
+    container_name: coltip_db
+    environment:
+      POSTGRES_DB: coltip_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - coltip_db_postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+ 
+  coltip_backend:
+    image: coltip:1.0.0
+    container_name: coltip_backend
+    ports:
+        - "8081:8080"
+    depends_on:
+        - coltip_db
+        - coltip_email
+        
+  coltip_email:
+    image: mailhog/mailhog:latest
+    container_name: coltip_email
+    ports:
+      - "1025:1025"  # SMTP port for sending emails
+      - "8025:8025"  # Web interface for MailHog
+    restart: always
+
+volumes:
+  coltip_db_postgres:
+    external: false

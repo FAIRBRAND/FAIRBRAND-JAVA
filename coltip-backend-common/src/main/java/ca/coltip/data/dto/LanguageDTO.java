@@ -1,0 +1,28 @@
+package ca.coltip.data.dto;
+
+import ca.coltip.data.entities.Language;
+
+public class LanguageDTO {
+    public int id;
+    public String languageName;
+    public String languageCode;
+
+    public LanguageDTO() {
+    }
+
+    // Constructor to create DTO from entity
+    public LanguageDTO(Language language) {
+        this.id = language.getId();
+        this.languageName = language.getLanguageName();
+        this.languageCode = language.getLanguageCode();
+    }
+
+    // Method to convert DTO back to entity
+    public Language toEntity() {
+        Language language = new Language();
+        language.setId(this.id);
+        language.setLanguageName(this.languageName);
+        language.setLanguageCode(this.languageCode);
+        return language;
+    }
+}
