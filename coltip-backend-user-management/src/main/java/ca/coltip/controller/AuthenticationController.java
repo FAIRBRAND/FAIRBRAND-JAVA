@@ -4,7 +4,7 @@ import ca.coltip.data.requests.AuthenticationRequest;
 import ca.coltip.data.responses.AuthenticationResponse;
 import ca.coltip.data.requests.RefreshTokenRequest;
 import ca.coltip.data.responses.RefreshTokenResponse;
-import ca.coltip.apiData.response.ApiResponse;
+import ca.coltip.data.response.ApiResponse;
 import ca.coltip.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

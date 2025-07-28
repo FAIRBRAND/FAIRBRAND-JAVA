@@ -1,7 +1,7 @@
 package ca.coltip.controller;
 
 import ca.coltip.data.dto.CourseTypeDTO;
-import ca.coltip.response.ApiResponse;
+import ca.coltip.data.response.ApiResponse;
 import ca.coltip.service.ICourseTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

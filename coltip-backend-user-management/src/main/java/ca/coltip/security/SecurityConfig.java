@@ -1,6 +1,5 @@
 package ca.coltip.security;
 
-import ca.coltip.apiData.security.filter.RequestBodyModificationFilter;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

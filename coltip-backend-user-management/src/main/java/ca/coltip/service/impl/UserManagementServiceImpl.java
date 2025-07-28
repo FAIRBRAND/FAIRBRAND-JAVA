@@ -3,7 +3,7 @@ package ca.coltip.service.impl;
 import ca.coltip.data.dto.UserManagementDTO;
 import ca.coltip.data.entities.User;
 import ca.coltip.exceptions.UserException;
-import ca.coltip.repository.UserRepository;
+import ca.coltip.data.repository.UserRepository;
 import ca.coltip.service.UserManagementService;
 import ca.coltip.utils.RecordStatus;
 import org.springframework.data.domain.Page;

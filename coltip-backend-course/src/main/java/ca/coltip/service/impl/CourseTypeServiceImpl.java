@@ -4,7 +4,7 @@ import ca.coltip.data.dto.CourseTypeDTO;
 import ca.coltip.data.entities.CourseType;
 import ca.coltip.data.mapper.CourseTypeMapper;
 import ca.coltip.exceptions.ResourceNotFoundException;
-import ca.coltip.repository.CourseTypeRepository;
+import ca.coltip.data.repository.CourseTypeRepository;
 import ca.coltip.service.ICourseTypeService;
 import ca.coltip.utils.RecordStatus;
 import org.springframework.stereotype.Service;

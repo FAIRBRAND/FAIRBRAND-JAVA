@@ -2,8 +2,8 @@ package ca.coltip.controller;
 
 import ca.coltip.data.dto.UserManagementDTO;
 import ca.coltip.data.requests.UserRequest;
+import ca.coltip.data.response.ApiResponse;
 import ca.coltip.data.responses.UserResponse;
-import ca.coltip.response.ApiResponse;
 import ca.coltip.service.UserManagementService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

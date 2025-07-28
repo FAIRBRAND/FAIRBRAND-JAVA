@@ -2,7 +2,7 @@ package ca.coltip.controller;
 
 import ca.coltip.data.requests.OtpVerificationRequest;
 import ca.coltip.data.requests.SignUpRequest;
-import ca.coltip.apiData.response.ApiResponse;
+import ca.coltip.data.response.ApiResponse;
 import ca.coltip.service.SignUpService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

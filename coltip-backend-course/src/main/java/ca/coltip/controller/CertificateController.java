@@ -1,7 +1,7 @@
 package ca.coltip.controller;
 
 import ca.coltip.data.dto.CertificateDTO;
-import ca.coltip.response.ApiResponse;
+import ca.coltip.data.response.ApiResponse;
 import ca.coltip.service.impl.CertificateService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

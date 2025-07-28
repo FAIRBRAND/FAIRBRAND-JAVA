@@ -1,6 +1,6 @@
 package ca.coltip.exceptions;
 
-import ca.coltip.apiData.response.ErrorResponse;
+import ca.coltip.data.response.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;

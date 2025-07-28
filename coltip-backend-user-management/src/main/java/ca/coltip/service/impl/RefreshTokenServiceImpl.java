@@ -4,7 +4,7 @@ import ca.coltip.data.dto.RefreshTokenDTO;
 import ca.coltip.data.entities.RefreshToken;
 import ca.coltip.data.entities.User;
 import ca.coltip.exceptions.TokenException;
-import ca.coltip.repository.RefreshTokenRepository;
+import ca.coltip.data.repository.RefreshTokenRepository;
 import ca.coltip.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -7,11 +7,11 @@ import ca.coltip.data.requests.OtpVerificationRequest;
 import ca.coltip.data.requests.SignUpRequest;
 import ca.coltip.exceptions.BadCredentialsException;
 import ca.coltip.exceptions.OtpException;
-import ca.coltip.repository.PendingUserRegistrationRepository;
-import ca.coltip.repository.SubgroupRepository;
-import ca.coltip.repository.UserRepository;
+import ca.coltip.data.repository.PendingUserRegistrationRepository;
+import ca.coltip.data.repository.SubgroupRepository;
+import ca.coltip.data.repository.UserRepository;
 import ca.coltip.service.SignUpService;
-import ca.coltip.strategy.EmailStrategy;
+import ca.coltip.services.EmailService;
 import ca.coltip.utils.OtpUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,15 +29,15 @@ public class SignUpServiceImpl implements SignUpService {
     private int otpExpirationMs;
 
     private final OtpUtil otpUtil;
-    private final EmailStrategy emailStrategy;
+    private final EmailService emailService;
     private final PendingUserRegistrationRepository pendingUserRegistrationRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final SubgroupRepository subgroupRepository;
 
-    public SignUpServiceImpl(OtpUtil otpUtil, EmailStrategy emailStrategy, PendingUserRegistrationRepository pendingUserRegistrationRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, SubgroupRepository subgroupRepository) {
+    public SignUpServiceImpl(OtpUtil otpUtil, EmailService emailService, PendingUserRegistrationRepository pendingUserRegistrationRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, SubgroupRepository subgroupRepository) {
         this.otpUtil = otpUtil;
-        this.emailStrategy = emailStrategy;
+        this.emailService = emailService;
         this.pendingUserRegistrationRepository = pendingUserRegistrationRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
@@ -59,7 +59,7 @@ public class SignUpServiceImpl implements SignUpService {
         pendingUserRegistrationRepository.save(pendingRegistration);
         // send otp by email
         String emailText = "Your otp is "+otp;
-        emailStrategy.sendEmail(signUpRequest.email, "Validation", emailText);
+        emailService.sendEmail(signUpRequest.email, "Validation", emailText);
     }
 
     @Override

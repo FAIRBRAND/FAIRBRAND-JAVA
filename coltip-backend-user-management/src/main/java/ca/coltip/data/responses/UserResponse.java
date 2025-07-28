@@ -1,7 +1,7 @@
 package ca.coltip.data.responses;
 
 import ca.coltip.data.dto.UserManagementDTO;
-import ca.coltip.response.PaginatedResponse;
+import ca.coltip.data.response.PaginatedResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;

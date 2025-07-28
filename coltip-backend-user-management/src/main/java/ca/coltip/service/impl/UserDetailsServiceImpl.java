@@ -1,7 +1,7 @@
 package ca.coltip.service.impl;
 
 import ca.coltip.data.entities.User;
-import ca.coltip.repository.UserRepository;
+import ca.coltip.data.repository.UserRepository;
 import ca.coltip.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
