@@ -48,6 +48,9 @@ public class RequestBodyModificationFilter implements Filter {
                 // Continue with the chain using the modified body
                 chain.doFilter(requestWrapper, servletResponse);
             }
+            else {
+                chain.doFilter(httpRequest, servletResponse);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package ca.coltip.services.impl;
 
 import ca.coltip.services.IHealthCheckService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -10,13 +11,17 @@ import java.sql.SQLException;
 @Service("DBHealthCheckService")
 public class DBHealthCheckService implements IHealthCheckService {
 
-    public boolean testHealth() {
-        String url = "jdbc:postgresql://localhost:5432/coltip_db";
-        String user = "postgres";
-        String password = "admin";
+    @Value("${spring.datasource.url}")
+    private String url;
 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+    @Value("${spring.datasource.username}")
+    private String user;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    public boolean testHealth() {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
             if (connection != null) {
                 System.out.println("Connected to the database!");
                 return true;

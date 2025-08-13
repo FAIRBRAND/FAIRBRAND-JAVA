@@ -77,9 +77,9 @@ public class User {
     private Set<Ability> listAbilities;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_subgroup",
-            joinColumns = @JoinColumn(name="id_user"),
-            inverseJoinColumns = @JoinColumn(name="id_subgroup"))
+    @JoinTable(name="sub_group",
+            joinColumns = @JoinColumn(name="id_group"),
+            inverseJoinColumns = @JoinColumn(name="id_sub_group"))
     private Set<SubGroup> listSubgroups;
 
     @Column(name="date_created")
@@ -95,12 +95,12 @@ public class User {
     @ManyToOne
     @JoinColumn(name="id_admin", insertable = false, updatable = false)
     private Admin modifiedBy;
-
-    @ManyToMany
-    @JoinTable(name="user_sub_group",
-            joinColumns = @JoinColumn(name="id_user"),
-            inverseJoinColumns = @JoinColumn(name="id_sub_group"))
-    private List<SubGroup> listSubGroups;
+//
+//    @ManyToMany
+//    @JoinTable(name="user_sub_group",
+//            joinColumns = @JoinColumn(name="id_user"),
+//            inverseJoinColumns = @JoinColumn(name="id_sub_group"))
+//    private List<SubGroup> listSubGroups;
 
     public String getName() {
         return firstName + " " + surname;
