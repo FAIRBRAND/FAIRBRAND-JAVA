@@ -21,6 +21,7 @@
 		<module>coltip-backend-user-management</module>
 		<module>coltip-backend-course</module>
 		<module>coltip-backend-payment</module>
+		<module>coltip-backend-rgpd-confident</module>
 	</modules>
 	<properties>
 		<spring-boot.version>3.4.2</spring-boot.version>

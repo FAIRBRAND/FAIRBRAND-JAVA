@@ -40,5 +40,10 @@
             <artifactId>coltip-backend-payment</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>ca</groupId>
+            <artifactId>coltip-backend-rgpd-confident</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
