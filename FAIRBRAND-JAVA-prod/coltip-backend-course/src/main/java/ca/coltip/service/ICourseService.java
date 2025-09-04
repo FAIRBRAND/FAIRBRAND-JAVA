@@ -1,0 +1,12 @@
+package ca.coltip.service;
+
+import ca.coltip.data.dto.CourseDTO;
+
+import java.util.List;
+
+public interface ICourseService {
+    List<CourseDTO> fetchAll();
+    CourseDTO createCourse(CourseDTO courseDTO);
+    CourseDTO updateCourse(CourseDTO courseDTO);
+    void deleteCourse(int id);
+}
