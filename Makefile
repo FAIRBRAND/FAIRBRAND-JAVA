@@ -43,12 +43,12 @@ clean:
 create-image:
 	docker rmi 	coltip:1.0.0
 	docker build -t coltip:1.0.0 .
-	
+
 # Build war with maven
 .PHONY: compile
 compile:
 	mvn clean install -DskipTests
-	
+
 # From war building to docker-compose 
 .PHONY: run-solution
 run-solution:

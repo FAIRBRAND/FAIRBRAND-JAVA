@@ -6,7 +6,6 @@ import org.springframework.lang.NonNull;
 @Entity
 @Table(name="course_enrollment")
 public class CourseEnrollment {
-
     @Id
     @Column(name="id_course_enrollment")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

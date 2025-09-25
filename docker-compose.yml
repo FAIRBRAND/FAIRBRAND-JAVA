@@ -12,7 +12,7 @@ services:
       - coltip_db_postgres:/var/lib/postgresql/data
     ports:
       - "5433:5432"
- 
+
   coltip_backend:
     image: coltip:1.0.0
     container_name: coltip_backend
@@ -21,7 +21,7 @@ services:
     depends_on:
         - coltip_db
         - coltip_email
-        
+
   coltip_email:
     image: mailhog/mailhog:latest
     container_name: coltip_email

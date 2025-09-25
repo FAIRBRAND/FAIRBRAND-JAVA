@@ -9,9 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>ca</groupId>
     <artifactId>coltip-backend-mainapp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -32,12 +30,7 @@
         </dependency>
         <dependency>
             <groupId>ca</groupId>
-            <artifactId>coltip-backend-course</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ca</groupId>
-            <artifactId>coltip-backend-payment</artifactId>
+            <artifactId>coltip-backend-appointment</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -1,9 +1,9 @@
 package ca.coltip.data.entities;
 
+import ca.coltip.data.entity.Auditable;
+import ca.coltip.data.entity.Language;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name="course")

@@ -3,10 +3,9 @@ package ca.coltip.service.impl;
 import ca.coltip.data.dto.CourseTypeDTO;
 import ca.coltip.data.entities.CourseType;
 import ca.coltip.data.mapper.CourseTypeMapper;
-import ca.coltip.exceptions.ResourceNotFoundException;
 import ca.coltip.data.repository.CourseTypeRepository;
 import ca.coltip.service.ICourseTypeService;
-import ca.coltip.utils.RecordStatus;
+import ca.coltip.data.entity.RecordStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class CourseTypeServiceImpl implements ICourseTypeService {
 
     @Override
     public List<CourseTypeDTO> fetchAll() {
-        List<CourseType> courseTypeList = courseTypeRepository.findAllByRecordStatus(RecordStatus.AVAILABLE.getCode());
+        List<CourseType> courseTypeList = courseTypeRepository.findAllByRecordStatus(RecordStatus.AVAILABLE.ordinal());
         return courseTypeList.stream()
                 .map(CourseTypeMapper::matoCourseTypeDTO)
                 .toList();
@@ -49,7 +48,7 @@ public class CourseTypeServiceImpl implements ICourseTypeService {
         CourseType courseTypeToUpdate = courseTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
                 "Course type", "id", id
         ));
-        courseTypeToUpdate.setRecordStatus(RecordStatus.DELETED.getCode());
+        courseTypeToUpdate.setRecordStatus(RecordStatus.DELETED.ordinal());
         courseTypeRepository.save(courseTypeToUpdate);
     }
 }

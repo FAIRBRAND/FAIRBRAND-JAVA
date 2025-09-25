@@ -1,5 +1,6 @@
 package ca.coltip.data.entities;
 
+import ca.coltip.data.entity.Language;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
@@ -44,14 +45,6 @@ public class CourseStep {
     @Column(name="date_created")
     private LocalDateTime dateCreated;
 
-    @ManyToOne
-    @JoinColumn(name="id_admin", insertable = false, updatable = false)
-    private Admin createdBy;
-
     @Column(name="date_modified")
     private LocalDateTime dateModified;
-
-    @ManyToOne
-    @JoinColumn(name="id_admin", insertable = false, updatable = false)
-    private Admin modifiedBy;
 }

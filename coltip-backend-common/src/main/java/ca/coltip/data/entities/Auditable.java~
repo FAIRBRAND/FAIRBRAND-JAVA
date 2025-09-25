@@ -1,4 +1,0 @@
-package ca.coltip.data.entities;
-
-public class Auditable {
-}

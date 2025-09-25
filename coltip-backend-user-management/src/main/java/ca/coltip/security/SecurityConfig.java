@@ -1,58 +1,65 @@
 package ca.coltip.security;
 
-import jakarta.annotation.Resource;
+import ca.coltip.component.AuthEntryPointJwt;
+import ca.coltip.component.AuthTokenFilter;
+import ca.coltip.component.CustomAccessDeniedHandler;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@AllArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig {
-    JwtFilter jwtAuthFilter;
-    private final JwtAuthEntryPoint authEntryPoint;
+  private final AuthEntryPointJwt authEntryPointJwt;
+  private final CustomAccessDeniedHandler customAccessDeniedHandler;
+  private final AuthTokenFilter authTokenFilter;
 
-    @Resource(name = "UserService")
-    private UserDetailsService userDetailsService;
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    public SecurityConfig(JwtAuthEntryPoint authEntryPoint, JwtFilter jwtAuthFilter) {
-        this.authEntryPoint = authEntryPoint;
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    return config.getAuthenticationManager();
+  }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtAuthFilter) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/signup/**", "/test/**", "/api/health-check").permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(authEntryPoint))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    return http
+      .csrf(AbstractHttpConfigurer::disable)
+      .authorizeHttpRequests(request ->
+        request
+          .requestMatchers("/health/**").permitAll()
+          .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+          .requestMatchers("/auth/**").permitAll()
+          .requestMatchers("/password/forget", "/password/reset").permitAll()
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+          .requestMatchers(HttpMethod.GET, "/appointment_request/**").hasRole("ADMIN")
+          .requestMatchers("/appointment_request/validate/**").hasRole("ADMIN")
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+          .requestMatchers(HttpMethod.POST, "/appointment_request").hasAnyRole("USER")
+
+          .anyRequest().authenticated()
+      )
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+      .exceptionHandling(exception -> exception
+        .authenticationEntryPoint(authEntryPointJwt)
+        .accessDeniedHandler(customAccessDeniedHandler)
+      )
+      .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+      .build();
+  }
 }
