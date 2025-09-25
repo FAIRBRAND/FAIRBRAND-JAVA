@@ -7,23 +7,23 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
-    @Column(name="id_user")
+    @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NonNull
     private int id;
 
     @NonNull
-    @Column(name="surname", length = 100)
+    @Column(name = "surname", length = 100)
     private String surname;
 
     @NonNull
-    @Column(name="first_name", length = 100)
+    @Column(name = "first_name", length = 100)
     private String firstName;
 
-    @Column(name="phone_number", length = 15)
+    @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
     @Column
@@ -33,74 +33,66 @@ public class User {
     @Column(length = 64)
     private String password;
 
-    @Column (length = 30000)
+    @Column(length = 30000)
     private String description;
 
-    @Column(name="cv_content", length = 1000)
+    @Column(name = "cv_content", length = 1000)
     private String cvContent;
 
     @NonNull
-    @Column(name="record_status")
-    private int recordStatus=1;
+    @Column(name = "record_status")
+    private int recordStatus = 1;
 
     @ManyToOne
-    @JoinColumn(name="id_domain")
+    @JoinColumn(name = "id_domain")
     private Domain domain;
 
     @ManyToOne
-    @JoinColumn(name="id_country")
+    @JoinColumn(name = "id_country")
     private Country country;
 
     @ManyToOne
-    @JoinColumn(name="id_language")
+    @JoinColumn(name = "id_language")
     private Language language;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User originUser;
 
     @ManyToMany
-    @JoinTable(name="user_professional_skill",
-    joinColumns = @JoinColumn(name="id_user"),
-    inverseJoinColumns = @JoinColumn(name="id_personal_skill"))
+    @JoinTable(name = "user_professional_skill", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_personal_skill"))
     private List<ProfessionalSkill> listProfessionalSkills;
 
     @ManyToMany
-    @JoinTable(name="user_degree",
-            joinColumns = @JoinColumn(name="id_user"),
-            inverseJoinColumns = @JoinColumn(name="id_degree"))
+    @JoinTable(name = "user_degree", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_degree"))
     private List<Degree> listDegrees;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_ability",
-            joinColumns = @JoinColumn(name="id_user"),
-            inverseJoinColumns = @JoinColumn(name="id_ability"))
+    @JoinTable(name = "user_ability", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_ability"))
     private Set<Ability> listAbilities;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="sub_group",
-            joinColumns = @JoinColumn(name="id_group"),
-            inverseJoinColumns = @JoinColumn(name="id_sub_group"))
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_sub_group", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_sub_group"))
     private Set<SubGroup> listSubgroups;
 
-    @Column(name="date_created")
+    @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
     @ManyToOne
-    @JoinColumn(name="id_admin", insertable = false, updatable = false)
+    @JoinColumn(name = "id_admin", insertable = false, updatable = false)
     private Admin createdBy;
 
-    @Column(name="date_modified")
+    @Column(name = "date_modified")
     private LocalDateTime dateModified;
 
     @ManyToOne
-    @JoinColumn(name="id_admin", insertable = false, updatable = false)
+    @JoinColumn(name = "id_admin", insertable = false, updatable = false)
     private Admin modifiedBy;
-//
-//    @ManyToMany
-//    @JoinTable(name="user_sub_group",
-//            joinColumns = @JoinColumn(name="id_user"),
-//            inverseJoinColumns = @JoinColumn(name="id_sub_group"))
-//    private List<SubGroup> listSubGroups;
+    //
+    // @ManyToMany
+    // @JoinTable(name="user_sub_group",
+    // joinColumns = @JoinColumn(name="id_user"),
+    // inverseJoinColumns = @JoinColumn(name="id_sub_group"))
+    // private List<SubGroup> listSubGroups;
 
     public String getName() {
         return firstName + " " + surname;

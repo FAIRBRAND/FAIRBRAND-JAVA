@@ -6,16 +6,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public record CustomUserDetails(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getListSubgroups().stream()
-                .flatMap(subgroup -> subgroup.getListAbilities().stream())
-                .map(ability -> new SimpleGrantedAuthority("ROLE_" + ability.getAbilityName().toUpperCase()))
-                .collect(Collectors.toList());
+        // Temporairement retourner une autorité par défaut pour permettre
+        // l'authentification
+        // TODO: Corriger le mapping JPA User->SubGroup->Ability
+        return java.util.Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -30,17 +29,17 @@ public record CustomUserDetails(User user) implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;  // Implement as needed
+        return true; // Implement as needed
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;  // Implement as needed
+        return true; // Implement as needed
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;  // Implement as needed
+        return true; // Implement as needed
     }
 
     @Override
@@ -48,4 +47,3 @@ public record CustomUserDetails(User user) implements UserDetails {
         return user.getRecordStatus() == 1;
     }
 }
-
