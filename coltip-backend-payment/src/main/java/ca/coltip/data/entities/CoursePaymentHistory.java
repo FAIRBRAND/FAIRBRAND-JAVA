@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="course_payment_history")
 public class CoursePaymentHistory {
-
     @Id
     @Column(name="id_payment_history")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

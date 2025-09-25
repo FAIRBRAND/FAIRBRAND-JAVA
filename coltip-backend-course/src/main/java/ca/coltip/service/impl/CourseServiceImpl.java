@@ -5,11 +5,10 @@ import ca.coltip.data.entities.Course;
 import ca.coltip.data.entities.CourseType;
 import ca.coltip.data.mapper.CourseMapper;
 import ca.coltip.data.mapper.CourseTypeMapper;
-import ca.coltip.exceptions.ResourceNotFoundException;
 import ca.coltip.data.repository.CourseRepository;
 import ca.coltip.data.repository.CourseTypeRepository;
 import ca.coltip.service.ICourseService;
-import ca.coltip.utils.RecordStatus;
+import ca.coltip.data.entity.RecordStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

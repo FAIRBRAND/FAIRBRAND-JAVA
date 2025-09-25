@@ -1,28 +1,29 @@
 package ca.coltip.data.dto;
 
-import ca.coltip.data.entities.Language;
+import ca.coltip.data.entity.Language;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LanguageDTO {
-    public int id;
-    public String languageName;
-    public String languageCode;
+  public Long id;
+  public String name;
+  public String code;
 
-    public LanguageDTO() {
-    }
+  public LanguageDTO(Language entity) {
+    this.id = entity.getId();
+    this.name = entity.getName();
+    this.code = entity.getCode();
+  }
 
-    // Constructor to create DTO from entity
-    public LanguageDTO(Language language) {
-        this.id = language.getId();
-        this.languageName = language.getLanguageName();
-        this.languageCode = language.getLanguageCode();
-    }
-
-    // Method to convert DTO back to entity
-    public Language toEntity() {
-        Language language = new Language();
-        language.setId(this.id);
-        language.setLanguageName(this.languageName);
-        language.setLanguageCode(this.languageCode);
-        return language;
-    }
+  public Language toLanguage() {
+    final var language = new Language();
+    language.setId(id);
+    language.setName(name);
+    language.setCode(code);
+    return language;
+  }
 }

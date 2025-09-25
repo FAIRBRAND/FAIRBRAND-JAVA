@@ -1,5 +1,7 @@
 package ca.coltip.data.entities;
 
+import ca.coltip.data.entity.Auditable;
+import ca.coltip.data.entity.User;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 

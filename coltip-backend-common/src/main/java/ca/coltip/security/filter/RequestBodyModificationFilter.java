@@ -1,7 +1,7 @@
 package ca.coltip.security.filter;
 
 import ca.coltip.security.wrapper.ModifiedRequestWrapper;
-import ca.coltip.utils.EncryptionUtils;
+import ca.coltip.util.EncryptionUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;

@@ -1,27 +1,17 @@
 package ca.coltip.data.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorResponse {
-    private int status;
-    private String errorMessage;
+  public static ErrorResponse of(int status, String message) {
+    return new ErrorResponse(status, message);
+  }
 
-    public ErrorResponse(int status, String errorMessage) {
-        this.status = status;
-        this.errorMessage = errorMessage;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
+  private int status;
+  private String message;
 }
