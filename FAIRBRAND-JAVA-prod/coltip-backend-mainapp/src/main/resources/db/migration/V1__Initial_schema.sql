@@ -736,3 +736,48 @@ CREATE TABLE public.diagnostic_result_profile (
     CONSTRAINT diagnostic_result_profile_pkey PRIMARY KEY (id_profile),
     CONSTRAINT fk_profile_diagnostic FOREIGN KEY (id_diagnostic) REFERENCES public.diagnostic(id_diagnostic)
 );
+
+-- ===================================
+-- FAIR-006: Table pour le système d'upload et de gestion des fichiers
+-- ===================================
+
+CREATE TABLE public.file_upload (
+    id_file serial4 NOT NULL,
+    original_name varchar(255) NOT NULL,
+    generated_name varchar(255) NOT NULL UNIQUE,
+    file_size int8 NOT NULL,
+    file_type varchar(50) NOT NULL, -- PDF, PPTX, MP4, MOV, AVI, PNG, JPG
+    mime_type varchar(100) NOT NULL,
+    file_extension varchar(10) NOT NULL,
+    upload_path varchar(500) NOT NULL, -- Chemin complet du fichier
+    uploaded_at timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+    uploaded_by_user int4 NULL,
+    is_public boolean DEFAULT false,
+    access_url varchar(500) NULL, -- URL publique d'accès
+    description varchar(1000) NULL,
+    record_status int4 DEFAULT 1, -- 1=Actif, 0=Supprimé
+    created_at timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+    created_by varchar(255) NULL,
+    updated_at timestamp(6) NULL,
+    updated_by varchar(255) NULL,
+    CONSTRAINT file_upload_pkey PRIMARY KEY (id_file),
+    CONSTRAINT uk_file_generated_name UNIQUE (generated_name),
+    CONSTRAINT fk_file_user FOREIGN KEY (uploaded_by_user) REFERENCES public.users(id_user)
+);
+
+-- Index pour améliorer les performances des requêtes
+CREATE INDEX idx_file_upload_user ON public.file_upload(uploaded_by_user);
+CREATE INDEX idx_file_upload_type ON public.file_upload(file_type);
+CREATE INDEX idx_file_upload_status ON public.file_upload(record_status);
+CREATE INDEX idx_file_upload_date ON public.file_upload(uploaded_at);
+
+-- Commentaires sur les colonnes pour FAIR-006
+COMMENT ON TABLE public.file_upload IS 'Table de gestion des fichiers uploadés - FAIR-006';
+COMMENT ON COLUMN public.file_upload.original_name IS 'Nom original du fichier tel qu''uploadé par l''utilisateur';
+COMMENT ON COLUMN public.file_upload.generated_name IS 'Nom généré selon le format [timestamp]_[uuid].extension';
+COMMENT ON COLUMN public.file_upload.file_size IS 'Taille du fichier en octets';
+COMMENT ON COLUMN public.file_upload.file_type IS 'Type de fichier (PDF, PPTX, MP4, MOV, AVI, PNG, JPG)';
+COMMENT ON COLUMN public.file_upload.upload_path IS 'Chemin complet du fichier sur le serveur (/var/app/uploads/...)';
+COMMENT ON COLUMN public.file_upload.access_url IS 'URL publique d''accès au fichier (base_url + generated_name)';
+COMMENT ON COLUMN public.file_upload.is_public IS 'Indique si le fichier est accessible publiquement';
+COMMENT ON COLUMN public.file_upload.record_status IS '1=Actif, 0=Supprimé (soft delete)';
