@@ -1,6 +1,6 @@
 # Define variables
 DOCKER_COMPOSE = docker-compose
-DOCKER_COMPOSE_FILE = docker-compose.yml
+DOCKER_COMPOSE_FILE = docker-compose.dev.yml
 
 # Default target
 .PHONY: all
