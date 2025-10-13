@@ -20,6 +20,7 @@
 		<module>coltip-backend-common</module>
 		<module>coltip-backend-user-management</module>
 		<module>coltip-backend-appointment</module>
+        <module>coltip-backend-payment</module>
 	</modules>
 	<properties>
 		<spring-boot.version>3.4.2</spring-boot.version>
