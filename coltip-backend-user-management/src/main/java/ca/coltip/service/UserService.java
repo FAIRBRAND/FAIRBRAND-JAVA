@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
@@ -175,5 +176,30 @@ public class UserService {
     final var user = whoami(userDetails);
     user.setRecordStatus(RecordStatus.DELETED);
     return userRepository.save(user).toDto();
+  }
+
+  public double getUserMonthlyGrowthPercentage() {
+    final var now = LocalDate.now();
+    final int currentMonth = now.getMonthValue();
+    final int currentYear = now.getYear();
+
+    final var previous = now.minusMonths(1);
+    final int previousMonth = previous.getMonthValue();
+    final int previousYear = previous.getYear();
+
+    final int status = RecordStatus.AVAILABLE.ordinal();
+
+    final long currentCount = userRepository.countUsersByMonthAndYearAndStatus(currentMonth, currentYear, status);
+    final long previousCount = userRepository.countUsersByMonthAndYearAndStatus(previousMonth, previousYear, status);
+
+    if (previousCount == 0) {
+      return 100.0;
+    }
+
+    return ((currentCount - previousCount) * 100.0) / previousCount;
+  }
+
+  public long getTotalUserActive() {
+    return userRepository.countUserByRecordStatus(RecordStatus.AVAILABLE);
   }
 }

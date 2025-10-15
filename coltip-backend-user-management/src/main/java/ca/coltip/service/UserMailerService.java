@@ -17,7 +17,7 @@ public class UserMailerService {
     final var param = new TemplateMailParam(
       user.getEmail(),
       user.getLanguage().toLocale(),
-      "templates/mail/otp_verification",
+      "mail/otp_verification",
       new TemplateMailParam.Subject("auth.mail.otp.subject")
     );
     param.setVariable("name", user.getFirstname());
@@ -32,7 +32,7 @@ public class UserMailerService {
     final var param = new TemplateMailParam(
       user.getEmail(),
       user.getLanguage().toLocale(),
-      "templates/mail/otp_verification",
+      "mail/otp_verification",
       new TemplateMailParam.Subject("auth.mail.otp.subject")
     );
     param.setVariable("name", user.getFirstname());
@@ -44,7 +44,7 @@ public class UserMailerService {
     final var param = new TemplateMailParam(
       user.getEmail(),
       user.getLanguage().toLocale(),
-      "templates/mail/welcome",
+      "mail/welcome",
       new TemplateMailParam.Subject("auth.mail.welcome.subject")
     );
     param.setVariable("name", user.getFirstname());
@@ -65,7 +65,7 @@ public class UserMailerService {
     final var param = new TemplateMailParam(
       newMail,
       user.getLanguage().toLocale(),
-      "templates/mail/mail_change",
+      "mail/mail_change",
       new TemplateMailParam.Subject("user.write.update.mail.subject")
     );
 
