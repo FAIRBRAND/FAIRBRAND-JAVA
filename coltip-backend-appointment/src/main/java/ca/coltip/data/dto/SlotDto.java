@@ -1,7 +1,6 @@
 package ca.coltip.data.dto;
 
 import ca.coltip.data.entity.Slot;
-import ca.coltip.util.DateUtil;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.ZoneId;
 
 @Data
 @AllArgsConstructor
@@ -23,28 +21,12 @@ public class SlotDto {
   private String title;
   private String description;
 
-  public SlotDto(Slot slot, String timezone) {
-    this(slot, ZoneId.of(timezone));
-  }
-
-  public SlotDto(Slot slot, ZoneId timezone) {
+  public SlotDto(Slot slot) {
     this.id = slot.getId();
     this.user = new UserDto(slot.getUser());
     this.title = slot.getTitle();
     this.description = slot.getDescription();
-
-    final var originZoneId = ZoneId.of(slot.getTimezone());
-
-    this.startAt = DateUtil.translate(
-      slot.getStartAt(),
-      originZoneId,
-      timezone
-    );
-
-    this.endAt = DateUtil.translate(
-      slot.getEndAt(),
-      originZoneId,
-      timezone
-    );
+    this.startAt = slot.getStartAt();
+    this.endAt = slot.getEndAt();
   }
 }

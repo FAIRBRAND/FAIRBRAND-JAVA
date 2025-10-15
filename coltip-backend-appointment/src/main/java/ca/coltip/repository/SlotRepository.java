@@ -9,23 +9,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.stream.Stream;
 
 @Repository
 public interface SlotRepository extends JpaRepository<Slot, Long> {
   @Query(
     """
-    SELECT new ca.coltip.data.dto.SlotDto(st, :timezone) FROM Slot st
+    SELECT new ca.coltip.data.dto.SlotDto(st) FROM Slot st
     INNER JOIN st.user
-    WHERE date(st.startAt) >= :start AND date(st.endAt) <= :end
+    WHERE st.startAt >= :start AND st.endAt <= :end
     ORDER BY st.startAt ASC
     """
   )
   Page<SlotDto> findAllInRange(
-    @Param("start") LocalDate start,
-    @Param("end") LocalDate end,
-    @Param("timezone") String timezone,
+    @Param("start") Instant start,
+    @Param("end") Instant end,
     Pageable pageable
   );
 
@@ -33,12 +32,12 @@ public interface SlotRepository extends JpaRepository<Slot, Long> {
     """
     SELECT st FROM Slot st
     INNER JOIN st.user
-    WHERE date(st.startAt) >= :start AND date(st.endAt) <= :end
+    WHERE st.startAt >= :start AND st.endAt <= :end
     ORDER BY st.startAt ASC
     """
   )
   Stream<Slot> findAllInRange(
-    @Param("start") LocalDate start,
-    @Param("end") LocalDate end
+    @Param("start") Instant start,
+    @Param("end") Instant end
   );
 }

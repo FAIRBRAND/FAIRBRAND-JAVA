@@ -23,16 +23,13 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class GoogleCalendarEnable implements GoogleCalendar {
-  private static DateTime dateTimeFrom(Instant instant, TimeZone timeZone) {
-    return new DateTime(Date.from(instant), timeZone);
+  private static DateTime dateTimeFrom(Instant instant) {
+    return new DateTime(Date.from(instant));
   }
 
-  private static EventDateTime eventDateTimeFrom(
-    Instant instant,
-    TimeZone timeZone
-  ) {
+  private static EventDateTime eventDateTimeFrom(Instant instant) {
     return new EventDateTime()
-      .setDateTime(dateTimeFrom(instant, timeZone));
+      .setDateTime(dateTimeFrom(instant));
   }
 
   private static EventAttendee eventAttendeeFrom(User user) {
@@ -42,12 +39,11 @@ public class GoogleCalendarEnable implements GoogleCalendar {
   }
 
   private static Event createFromSlot(Slot slot) {
-    final var timezone = TimeZone.getTimeZone(slot.getTimezone());
     return new Event()
       .setSummary(slot.getTitle())
       .setDescription(slot.getDescription())
-      .setStart(eventDateTimeFrom(slot.getStartAt(), timezone))
-      .setEnd(eventDateTimeFrom(slot.getEndAt(), timezone))
+      .setStart(eventDateTimeFrom(slot.getStartAt()))
+      .setEnd(eventDateTimeFrom(slot.getEndAt()))
       .setKind("Appointment")
       .setAttendees(List.of(
         eventAttendeeFrom(slot.getUser())
@@ -76,12 +72,9 @@ public class GoogleCalendarEnable implements GoogleCalendar {
 
   private boolean isSlotUnavailable(Slot slot) throws GoogleCalendarClientException {
     try {
-      final var timezone = TimeZone.getTimeZone(slot.getTimezone());
-
       final var request = new FreeBusyRequest()
-        .setTimeMin(dateTimeFrom(slot.getStartAt(), timezone))
-        .setTimeMax(dateTimeFrom(slot.getStartAt(), timezone))
-        .setTimeZone(slot.getTimezone())
+        .setTimeMin(dateTimeFrom(slot.getStartAt()))
+        .setTimeMax(dateTimeFrom(slot.getStartAt()))
         .setItems(Collections.singletonList(new FreeBusyRequestItem().setId(calendarId)));
 
       return calendar

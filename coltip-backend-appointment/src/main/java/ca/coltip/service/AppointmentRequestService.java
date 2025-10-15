@@ -21,14 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 @Service
 @AllArgsConstructor
 public class AppointmentRequestService {
   private static AppointmentRequest create(
     AppointmentPayload payload,
-    String timezone,
     User user
   ) {
     final var appointmentRequest = new AppointmentRequest();
@@ -37,7 +36,6 @@ public class AppointmentRequestService {
     appointmentRequest.setDescription(payload.getDescription());
     appointmentRequest.setStartAt(payload.getStartAt());
     appointmentRequest.setEndAt(payload.getEndAt());
-    appointmentRequest.setTimezone(ZoneId.of(timezone).getId());
     appointmentRequest.setStatus(AppointmentStatus.PENDING);
     return appointmentRequest;
   }
@@ -47,7 +45,6 @@ public class AppointmentRequestService {
     slot.setUser(appointment.getUser());
     slot.setTitle(appointment.getTitle());
     slot.setDescription(appointment.getDescription());
-    slot.setTimezone(appointment.getTimezone());
     slot.setStartAt(appointment.getStartAt());
     slot.setEndAt(appointment.getEndAt());
     return slot;
@@ -70,14 +67,13 @@ public class AppointmentRequestService {
   @Transactional
   public void create(
     UserDetails userDetails,
-    AppointmentPayload payload,
-    String timezone
+    AppointmentPayload payload
   ) throws SlotUnavailableException, UserNotFoundException {
-    if (slotService.isUnavailable(payload.getStartAt(), payload.getEndAt(), timezone)) {
+    if (slotService.isUnavailable(payload.getStartAt(), payload.getEndAt())) {
       throw new SlotUnavailableException();
     }
 
-    final var appointmentRequest = create(payload, timezone, getUser(userDetails));
+    final var appointmentRequest = create(payload, getUser(userDetails));
     final var appointment = appointmentRepository.save(appointmentRequest);
     mailer.notifyAdminsForRequest(appointment);
   }
@@ -85,7 +81,6 @@ public class AppointmentRequestService {
   @Transactional
   public AppointmentRequestDto validate(
     Long id,
-    String timezone,
     AppointmentValidationRequest payload
   ) throws GoogleCalendarClientException, SlotUnavailableException, AppointmentNotFoundException {
     final var appointment = appointmentRepository
@@ -103,35 +98,31 @@ public class AppointmentRequestService {
 
     mailer.notifyClientForValidation(appointment, validationStatus);
 
-    return new AppointmentRequestDto(appointment, timezone);
+    return new AppointmentRequestDto(appointment);
   }
 
-  public AppointmentRequestDto getById(
-    Long id,
-    String timezone
-  ) throws AppointmentNotFoundException {
+  public AppointmentRequestDto getById(Long id) throws AppointmentNotFoundException {
     final var appointment = appointmentRepository
       .findById(id)
       .orElseThrow(AppointmentNotFoundException::new);
-
-    return new AppointmentRequestDto(appointment, timezone);
+    return new AppointmentRequestDto(appointment);
   }
 
   public Page<AppointmentRequestDto> getAll(
     @NonNull Pageable pageable,
     @NonNull LocalDate startDate,
     @NonNull LocalDate endDate,
-    @NonNull String timezone,
     @Nullable AppointmentStatus status
   ) {
+    final var start = startDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+    final var end = endDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
+
     if (status == null) {
-      return appointmentRepository.findAllInRange(startDate, endDate, timezone, pageable);
+      return appointmentRepository.findAllInRange(start, end, pageable);
     }
 
     return appointmentRepository.findAllInRangeAndStatus(
-      startDate,
-      endDate,
-      timezone,
+      start, end,
       status,
       pageable
     );

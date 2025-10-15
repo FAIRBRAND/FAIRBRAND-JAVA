@@ -24,9 +24,6 @@ public class Slot {
   @Column(name = "end_at")
   private Instant endAt;
 
-  @Column(nullable = false)
-  private String timezone;
-
   @ManyToOne
   @JoinColumn(name = "id_user")
   private User user;

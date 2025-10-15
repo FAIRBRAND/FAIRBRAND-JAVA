@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 @Service
@@ -66,68 +66,48 @@ public class SlotService {
 
   public boolean isUnavailable(
     Instant startAt,
-    Instant endAt,
-    String timezone
-  ) {
-    return isUnavailable(
-      startAt,
-      endAt,
-      ZoneId.of(timezone)
-    );
-  }
-
-  public boolean isUnavailable(
-    Instant startAt,
-    Instant endAt,
-    ZoneId timezone
+    Instant endAt
   ) {
     return slotRepository
-      .findAllInRange(
-        LocalDate.ofInstant(startAt, timezone),
-        LocalDate.ofInstant(endAt, timezone)
-      )
-      .map(slot -> new SlotDto(slot, timezone))
+      .findAllInRange(startAt, endAt)
       .anyMatch(slot ->
         slot.getStartAt().compareTo(startAt) >= 0 &&
         slot.getEndAt().compareTo(endAt) <= 0
       );
   }
 
-  public SlotDto getById(
-    Long id,
-    String timezone
-  ) throws SlotNotFoundException {
+  public SlotDto getById(Long id) throws SlotNotFoundException {
     final var slot = slotRepository
       .findById(id)
       .orElseThrow(SlotNotFoundException::new);
-    return new SlotDto(slot, timezone);
+    return new SlotDto(slot);
   }
 
   public Page<SlotDto> getAll(
     Pageable pageable,
-    String timezone,
     LocalDate startDate,
     LocalDate endDate
   ) {
-    return slotRepository.findAllInRange(startDate, endDate, timezone, pageable);
+    final var start = startDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+    final var end = endDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
+    return slotRepository.findAllInRange(start, end, pageable);
   }
 
   @Transactional
   public SlotDto save(Slot value) throws SlotUnavailableException, GoogleCalendarClientException {
-    if (isUnavailable(value.getStartAt(), value.getEndAt(), value.getTimezone())) {
+    if (isUnavailable(value.getStartAt(), value.getEndAt())) {
       throw new SlotUnavailableException();
     }
 
     final var id = googleCalendarService.add(value);
     value.setGoogleCalendarId(id);
     final var slot = slotRepository.save(value);
-    return new SlotDto(slot, slot.getTimezone());
+    return new SlotDto(slot);
   }
 
   @Transactional
   public void editById(
     Long id,
-    String timezone,
     UserDetails userDetails,
     AppointmentPayload payload
   ) throws GoogleCalendarClientException,
@@ -143,10 +123,9 @@ public class SlotService {
       throw new SlotOwnerException();
     }
 
-    slot.setTimezone(timezone);
     mergePayload(slot, payload);
 
-    if (isUnavailable(slot.getStartAt(), slot.getEndAt(), timezone)) {
+    if (isUnavailable(slot.getStartAt(), slot.getEndAt())) {
       throw new SlotUnavailableException();
     }
 
@@ -163,7 +142,6 @@ public class SlotService {
   @Transactional
   public SlotDto deleteById(
     Long id,
-    String timezone,
     UserDetails userDetails
   ) throws GoogleCalendarClientException, SlotNotFoundException, SlotOwnerException {
     final var slot = slotRepository
@@ -177,6 +155,6 @@ public class SlotService {
     slotRepository.delete(slot);
     googleCalendarService.delete(slot);
     mailer.notifyAdminsForCancellation(slot);
-    return new SlotDto(slot, timezone);
+    return new SlotDto(slot);
   }
 }
