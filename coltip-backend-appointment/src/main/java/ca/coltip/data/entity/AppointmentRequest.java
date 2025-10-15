@@ -27,9 +27,6 @@ public class AppointmentRequest {
   private Instant endAt;
 
   @Column(nullable = false)
-  private String timezone;
-
-  @Column(nullable = false)
   private AppointmentStatus status;
 
   @ManyToOne

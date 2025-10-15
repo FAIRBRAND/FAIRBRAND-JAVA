@@ -27,11 +27,10 @@ public class SlotController {
   @GetMapping("{id}")
   public ApiResponse<SlotDto> getById(
     @PathVariable Long id,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestHeader(name = "Accept-Language", required = false) Locale locale
   ) {
     try {
-      return ApiResponse.ok(service.getById(id, timezone));
+      return ApiResponse.ok(service.getById(id));
     } catch (SlotNotFoundException e) {
       throw new NotFoundException(translate.resourceNotFound(locale));
     }
@@ -39,9 +38,8 @@ public class SlotController {
 
   @GetMapping
   public ApiResponse<Page<SlotDto>> getAll(
-    @RequestParam(required = false, defaultValue = "1") Integer page,
+    @RequestParam(required = false, defaultValue = "0") Integer page,
     @RequestParam(required = false, defaultValue = "10") Integer size,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestParam(name = "start_date") LocalDate startDate,
     @RequestParam(name = "end_date") LocalDate endDate
   ) {
@@ -49,7 +47,6 @@ public class SlotController {
     return ApiResponse.ok(
       service.getAll(
         pageable,
-        timezone,
         startDate,
         endDate
       )
@@ -59,7 +56,6 @@ public class SlotController {
   @PutMapping("{id}")
   public ApiResponse<String> modifyById(
     @PathVariable Long id,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestHeader(name = "Accept-Language", required = false) Locale locale,
     @AuthenticationPrincipal UserDetails userDetails,
     @RequestBody AppointmentPayload payload
@@ -67,7 +63,6 @@ public class SlotController {
     try {
       service.editById(
         id,
-        timezone,
         Objects.requireNonNull(userDetails),
         payload
       );
@@ -90,7 +85,6 @@ public class SlotController {
   @DeleteMapping("{id}")
   public ApiResponse<SlotDto> deleteById(
     @PathVariable Long id,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestHeader(name = "Accept-Language", required = false) Locale locale,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
@@ -98,7 +92,6 @@ public class SlotController {
       return ApiResponse.ok(
         service.deleteById(
           id,
-          timezone,
           Objects.requireNonNull(userDetails)
         )
       );

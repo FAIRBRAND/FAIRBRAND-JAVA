@@ -29,13 +29,12 @@ public class AppointmentController {
 
   @PostMapping
   public ApiResponse<String> create(
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestHeader(name = "Accept-Language", required = false) Locale locale,
     @AuthenticationPrincipal UserDetails userDetails,
     @RequestBody AppointmentPayload payload
   ) {
     try {
-      service.create(userDetails, payload, timezone);
+      service.create(userDetails, payload);
       return ApiResponse.ok(appointmentTranslate.appointmentRequestSent(locale));
     } catch (SlotUnavailableException e) {
       throw new BadRequestException(appointmentTranslate.slotUnavailable(locale));
@@ -47,12 +46,11 @@ public class AppointmentController {
   @PostMapping("validate/{id}")
   public ApiResponse<AppointmentRequestDto> validateAppointmentRequest(
     @PathVariable Long id,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestHeader(name = "Accept-Language", required = false) Locale locale,
     @RequestBody AppointmentValidationRequest payload
   ) {
     try {
-      return ApiResponse.ok(service.validate(id, timezone, payload));
+      return ApiResponse.ok(service.validate(id, payload));
     } catch (GoogleCalendarClientException e) {
       throw new InternalServerError(
         appointmentTranslate.googleCalendarError(locale),
@@ -67,10 +65,9 @@ public class AppointmentController {
 
   @GetMapping
   public ApiResponse<Page<AppointmentRequestDto>> getAll(
-    @RequestParam(required = false, defaultValue = "1") Integer page,
+    @RequestParam(required = false, defaultValue = "0") Integer page,
     @RequestParam(required = false, defaultValue = "10") Integer size,
     @RequestParam(required = false) AppointmentStatus status,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestParam(name = "start_date") LocalDate startDate,
     @RequestParam(name = "end_date") LocalDate endDate
   ) {
@@ -80,7 +77,6 @@ public class AppointmentController {
         pageable,
         startDate,
         endDate,
-        timezone,
         status
       )
     );
@@ -89,11 +85,10 @@ public class AppointmentController {
   @GetMapping("{id}")
   public ApiResponse<AppointmentRequestDto> getById(
     @PathVariable Long id,
-    @RequestHeader("X-Client-Timezone") String timezone,
     @RequestHeader(name = "Accept-Language", required = false) Locale locale
   ) {
     try {
-      return ApiResponse.ok(service.getById(id, timezone));
+      return ApiResponse.ok(service.getById(id));
     } catch (AppointmentNotFoundException e) {
       throw new NotFoundException(appointmentTranslate.resourceNotFound(locale));
     }

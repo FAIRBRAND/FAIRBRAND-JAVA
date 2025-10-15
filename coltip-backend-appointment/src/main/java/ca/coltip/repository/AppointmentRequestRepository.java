@@ -10,37 +10,35 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Repository
 public interface AppointmentRequestRepository extends JpaRepository<AppointmentRequest, Long> {
   @Query(
     """
-    SELECT new ca.coltip.data.dto.AppointmentRequestDto(ap, :timezone) FROM AppointmentRequest ap
+    SELECT new ca.coltip.data.dto.AppointmentRequestDto(ap) FROM AppointmentRequest ap
     INNER JOIN ap.user
-    WHERE date(ap.startAt) >= :start AND date(ap.endAt) <= :end
+    WHERE ap.startAt >= :start AND ap.endAt <= :end
     ORDER BY ap.startAt ASC
     """
   )
   Page<AppointmentRequestDto> findAllInRange(
-    @Param("start") LocalDate start,
-    @Param("end") LocalDate end,
-    @Param("timezone") String timezone,
+    @Param("start") Instant start,
+    @Param("end") Instant end,
     Pageable pageable
   );
 
   @Query(
     """
-    SELECT new ca.coltip.data.dto.AppointmentRequestDto(ap, :timezone) FROM AppointmentRequest ap
+    SELECT new ca.coltip.data.dto.AppointmentRequestDto(ap) FROM AppointmentRequest ap
     INNER JOIN ap.user
-    WHERE ap.status = :status AND (date(ap.startAt) >= :start AND date(ap.endAt) <= :end)
+    WHERE ap.status = :status AND ap.startAt >= :start AND ap.endAt <= :end
     ORDER BY ap.startAt ASC
     """
   )
   Page<AppointmentRequestDto> findAllInRangeAndStatus(
-    @Param("start") LocalDate start,
-    @Param("end") LocalDate end,
-    @Param("timezone") String timezone,
+    @Param("start") Instant start,
+    @Param("end") Instant end,
     @Param("status") AppointmentStatus status,
     Pageable pageable
   );
