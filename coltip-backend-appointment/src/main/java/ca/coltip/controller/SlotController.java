@@ -38,7 +38,7 @@ public class SlotController {
 
   @GetMapping
   public ApiResponse<Page<SlotDto>> getAll(
-    @RequestParam(required = false, defaultValue = "1") Integer page,
+    @RequestParam(required = false, defaultValue = "0") Integer page,
     @RequestParam(required = false, defaultValue = "10") Integer size,
     @RequestParam(name = "start_date") LocalDate startDate,
     @RequestParam(name = "end_date") LocalDate endDate

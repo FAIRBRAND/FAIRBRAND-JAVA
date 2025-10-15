@@ -65,7 +65,7 @@ public class AppointmentController {
 
   @GetMapping
   public ApiResponse<Page<AppointmentRequestDto>> getAll(
-    @RequestParam(required = false, defaultValue = "1") Integer page,
+    @RequestParam(required = false, defaultValue = "0") Integer page,
     @RequestParam(required = false, defaultValue = "10") Integer size,
     @RequestParam(required = false) AppointmentStatus status,
     @RequestParam(name = "start_date") LocalDate startDate,
