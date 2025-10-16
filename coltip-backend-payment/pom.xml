@@ -27,9 +27,9 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>ca</groupId>
-            <artifactId>coltip-backend-course</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>30.0.0</version>
         </dependency>
     </dependencies>
 
