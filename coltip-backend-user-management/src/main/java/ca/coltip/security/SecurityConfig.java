@@ -47,6 +47,10 @@ public class SecurityConfig {
           .requestMatchers("/auth/**").permitAll()
           .requestMatchers("/password/forget", "/password/reset").permitAll()
 
+          .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+          .requestMatchers("/actuator/metrics", "/actuator/prometheus").permitAll()
+          .requestMatchers("/actuator/**").hasRole("ADMIN")
+
           .requestMatchers(HttpMethod.GET, "/appointment_request/**").hasRole("ADMIN")
           .requestMatchers("/appointment_request/validate/**").hasRole("ADMIN")
 
